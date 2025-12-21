@@ -23,7 +23,6 @@ import { RouterView } from 'vue-router'
     max-width: 1000px;
     background-color: #f1f1f1;
     margin: auto;
-    padding: 2%;
 }
 
 #background {
