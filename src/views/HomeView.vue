@@ -1,7 +1,8 @@
 <template>
     <h2>Välkommen!</h2>
     <p>Det här är en sida som handlar om att titta på film. Här tänkte jag lista olika filmer jag har sett eller vill
-        se.</p>
+        se. Filmer kan läggas till i listan med hjälp av formuläret, eller raderas ur tabellen. Sidan använder laravel
+        som backend.</p>
 </template>
 
 <script setup></script>
