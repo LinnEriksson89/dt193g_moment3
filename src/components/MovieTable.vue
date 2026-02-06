@@ -1,6 +1,4 @@
 <template>
-    <p v-if="isLoading">Tabellen håller på att läsas in.</p>
-    <p v-if="error">{{ errorMessage }}</p>
     <table>
         <thead>
             <tr>
@@ -15,7 +13,7 @@
                 <td>{{ movie.name }}</td>
                 <td>{{ movie.year }}</td>
                 <td>{{ movie.watched ? "Ja" : "Nej" }}</td>
-                <td><button @click="deleteMovie(movie.id)">Radera</button></td>
+                <td><button @click="removeMovie(movie.id)">Radera</button></td>
             </tr>
         </tbody>
     </table>
@@ -23,59 +21,18 @@
 
 <script>
 export default {
-    data() {
-        return {
-            movies: [],
-            isLoading: false,
-            error: false,
-            errorMessage: ""
-        };
-    },
+    props: ["movies"],
+    emits: ["deleteMovie"],
     methods: {
-        //Get all movies with fetch
-        async getMovies() {
-            //Set loading variable to true so info is posted while loading.
-            this.isLoading = true;
-            try {
-                //Fetch data, turn response to json, add in movies-array, turn loading of.
-                const response = await fetch("http://localhost:8000/api/movie/");
-                const data = await response.json();
-                this.movies = data;
-                this.isLoading = false;
-
-            } catch (error) {
-                this.error = true,
-                    this.errorMessage = "Tabellen kunde inte hämtas.";
-
-            }
-        },
-        //Make the delete-button work.
-        deleteMovie(movieId) {
-            //Create url from the id of the movie
-            let url = "http://localhost:8000/api/movie/" + movieId;
-
-            //Use fetch with delete and then run getMovies again.
-            fetch(url,
-                {
-                    method: "DELETE"
-                }
-            )
-                .then(this.getMovies())
+        //Method for deleting movie sent to view.
+        removeMovie(id) {
+            this.$emit("deleteMovie", id)
         }
-    },
-    mounted() {
-        //Run getMovies when page has loaded.
-        this.getMovies();
-    },
-};
+    }
+}
 </script>
 
 <style scoped>
-p {
-    border: 2px solid #800;
-    padding: 2%;
-}
-
 table {
     width: 100%;
     border-collapse: collapse;
@@ -104,7 +61,8 @@ tr:focus-within {
     color: #f1f1f1;
 }
 
-td, th {
+td,
+th {
     border-left: 1px solid;
 }
 

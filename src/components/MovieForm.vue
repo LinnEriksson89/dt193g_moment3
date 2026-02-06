@@ -1,6 +1,5 @@
 <template>
-    <p>{{ errorBool ? errorMessage : "" }}</p>
-    <form v-on:submit.prevent="addMovie">
+    <form v-on:submit.prevent="createMovie">
         <fieldset>
             <legend>Lägg till en film:</legend>
             <label for="title">Filmtitel:</label>
@@ -17,8 +16,8 @@
             <br />
 
             <div class="buttons">
-                <input type="submit" value="Skicka" class="button" />
                 <input type="reset" value="Rensa" class="button" />
+                <input type="submit" value="Skicka" class="button" />
             </div>
         </fieldset>
     </form>
@@ -32,36 +31,26 @@ export default {
             movieName: "",
             movieYear: 0,
             movieWatched: false,
-            errorBool: false,
-            errorMessage: ""
         }
     },
+    emits: ["addMovie"],
     methods: {
-        //Add a movie with fetch
-        addMovie() {
-            let movie = {
+        //Create movie to send to view
+        createMovie() {
+            const newMovie = {
                 name: this.movieName,
                 year: this.movieYear,
-                watched: this.movieWatched
+                watched: this.movieWatched,
             }
 
-            try {
-                //Add movie with fetch and post, then make response to json.
-                fetch("http://localhost:8000/api/movie/", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(movie)
-                })
-                    .then(response => response.json())
-                    .then(data => console.log(data))
+            //Use emit to send data to the view.
+            this.$emit("addMovie", newMovie);
 
-            } catch (error) {
-                this.errorBool = true,
-                    this.errorMessage = "Filmen kunde inte läggas till.";
-                console.log(error);
-
-            }
-        }
+            //Reset form
+            this.movieName = "";
+            this.movieYear = 0;
+            this.movieWatched = false;
+        },
     }
 }
 </script>
