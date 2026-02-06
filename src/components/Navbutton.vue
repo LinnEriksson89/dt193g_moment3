@@ -1,5 +1,5 @@
 <template>
-  <a v-bind:href="props.link" :class="{ active: isActive}">
+  <a v-bind:href="props.link">
     <li>{{ props.title }}</li>
   </a>
 </template>
